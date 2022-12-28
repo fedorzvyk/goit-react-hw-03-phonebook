@@ -16,6 +16,19 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    const localcontacts = JSON.parse(localStorage.getItem('contacts'));
+    if (localcontacts) {
+      this.setState({ contacts: localcontacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   handleFformSubmit = data => {
     const repeatingName = this.state.contacts.find(
       contact => contact.name === data.name
@@ -48,19 +61,6 @@ export class App extends Component {
       contact.name.toLowerCase().includes(filter.toLowerCase().trim())
     );
   };
-
-  componentDidMount() {
-    const localcontacts = JSON.parse(localStorage.getItem('contacts'));
-    if (localcontacts) {
-      this.setState({ contacts: localcontacts });
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-  }
 
   render() {
     const { filter } = this.state;
